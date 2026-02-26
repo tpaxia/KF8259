@@ -54,7 +54,7 @@ module KF8259_Interrupt_Request (
             else if (level_or_edge_toriggered_config)
                 interrupt_request_register[ir_bit_no] <= interrupt_request_pin[ir_bit_no];
             else
-                interrupt_request_register[ir_bit_no] <= interrupt_request_edge[ir_bit_no];
+                interrupt_request_register[ir_bit_no] <= interrupt_request_register[ir_bit_no] | interrupt_request_edge[ir_bit_no];
         end
     end
     endgenerate
