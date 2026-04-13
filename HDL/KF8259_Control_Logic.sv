@@ -51,7 +51,8 @@ module KF8259_Control_Logic (
     output  logic   [2:0]   priority_rotate,
     output  logic           freeze,
     output  logic           latch_in_service,
-    output  logic   [7:0]   clear_interrupt_request
+    output  logic   [7:0]   clear_interrupt_request,
+    output  logic   [7:0]   last_vector
 );
     import KF8259_Common_Package::num2bit;
     import KF8259_Common_Package::bit2num;
@@ -230,6 +231,14 @@ module KF8259_Control_Logic (
     // End of acknowledge sequence
     wire    end_of_acknowledge_sequence =  (control_state != POLL) & (control_state != CTL_READY) & (next_control_state == CTL_READY);
     wire    end_of_poll_command         =  (control_state == POLL) & (control_state != CTL_READY) & (next_control_state == CTL_READY);
+
+    // Latch vector while PIC is driving it (ACK2 with INTACK low)
+    always_ff @(negedge clock, posedge reset) begin
+        if (reset)
+            last_vector <= 8'b00000000;
+        else if (out_control_logic_data)
+            last_vector <= control_logic_data;
+    end
 
     //
     // Initialization command word 1

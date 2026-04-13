@@ -28,7 +28,8 @@ module KF8259 (
     input   logic           interrupt_acknowledge_n,
     output  logic           interrupt_to_cpu,
 
-    input   logic   [7:0]   interrupt_request
+    input   logic   [7:0]   interrupt_request,
+    output  logic   [7:0]   last_vector
 );
 
     //
@@ -128,7 +129,8 @@ module KF8259 (
         .priority_rotate                    (priority_rotate),
         .freeze                             (freeze),
         .latch_in_service                   (latch_in_service),
-        .clear_interrupt_request            (clear_interrupt_request)
+        .clear_interrupt_request            (clear_interrupt_request),
+        .last_vector                        (last_vector)
     );
 
     //
